@@ -97,6 +97,8 @@ def process_pdf_from_url(pdf_data):
         logging.error(f"An error occurred with URL {url}: {str(e)}")
 
 
+
+
 # 示例调用
 if __name__ == "__main__":
     pdf_urls = get_pdf_urls()
