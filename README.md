@@ -9,7 +9,7 @@ source ~/.venvs/aienv/bin/activate
 
 arxiv 直接解析线上pdf数据库链接
 
-`python link_extract_online.py`
+`python link_extract.py`
 
 arxiv 解析本地pdf数据库链接(需先下载pdf到本地)
 
