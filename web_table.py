@@ -52,9 +52,10 @@ filtered_flattened_data = []
 for category, category_data_list in flattened_data:
     filtered_category_data_list = [
     dataset for dataset in category_data_list 
-        if ('Title' in dataset and 'Description' in dataset and 'OriginalText' in dataset) and
+        if ('Title' in dataset and 'Description' in dataset and 'PaperUrl' in dataset and 'OriginalText' in dataset) and
             (search_query.lower() in dataset['Title'].lower() or
             search_query.lower() in dataset['Description'].lower() or 
+            search_query.lower() in dataset['PaperUrl'].lower() or
             search_query.lower() in dataset['OriginalText'].lower() 
             )
     ]
@@ -74,4 +75,5 @@ for category, category_data_list in filtered_flattened_data:
             # st.markdown(f"**Example Problem:** {dataset['Example']['Problem']}")
             # st.markdown(f"**Example Solution:** {dataset['Example']['Solution']}")
             # st.markdown(f"**URL:** [{dataset['URL']}]({dataset['URL']})")
+            st.markdown(f"**PaperCited:** {dataset['PaperUrl']}")
             st.markdown(f"**context:** {dataset['OriginalText']}")

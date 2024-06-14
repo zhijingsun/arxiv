@@ -135,7 +135,7 @@ def process_pdf_from_url(pdf_data):
             # 处理分类结果
             if classification_result == "Dataset: Yes":
                 encoded_url = process_content(pdf_data, link) # dataset url
-                json_result = analyse_content(pdf_data, context) 
+                json_result = analyse_content(pdf_data, context, url) 
                 add_dataset_info(pdf_data['category'], encoded_url, json_result) #
     except Exception as e:
         logging.error(f"An error occurred with URL {url}: {str(e)}")

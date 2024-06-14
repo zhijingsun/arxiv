@@ -24,7 +24,7 @@ class DatasetDescription(BaseModel):
     description: str
     url: str
 
-def analyse_content(pdf_data, text: str):
+def analyse_content(pdf_data, text: str, url):
     try:
         # Analyze the README content with JSON output prompt
         assistant = Assistant(
@@ -57,6 +57,7 @@ def analyse_content(pdf_data, text: str):
         
         # Add the original text to the response dictionary
         response_dict["OriginalText"] = text
+        response_dict["PaperUrl"] = url
 
         # Convert to JSON format
         json_result = json.dumps(response_dict, indent=4)
