@@ -53,30 +53,16 @@ def analyse_content(pdf_data, text: str):
         
         # Parse the response
         response_dict = json.loads(response)
+        
+        # Add the original text to the response dictionary
+        response_dict["OriginalText"] = text
 
         # Convert to JSON format
         json_result = json.dumps(response_dict, indent=1)
         print("Final JSON result:", json_result)
-        #print(type(json_result))
 
         return json_result
 
     except Exception as e:
         logging.error(f"An error occurred: {str(e)}")
 
-
-
-#assistant.get_response(f"analyze this document with the given format in instruction: {pdf_content_first}")
-
-# try:
-#     # 调用assistant进行分析
-#     response = assistant.print_response(f"analyze this document with the given format: {pdf_content}")
-
-#     # 转换为JSON格式字符串
-#     json_result = json.dumps(result, indent=4)
-#     print(json_result)
-# except Exception as e:
-#     logging.error(f"An error occurred: {str(e)}")
-
-# print(type(pdf_id)) 
-# print(type(response)) 
