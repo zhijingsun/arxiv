@@ -123,11 +123,11 @@ def process_pdf_from_url(pdf_data):
         
         
         # 提取链接上下文并用于分类文本
-        for link in extract_https_links(pdf_content):
+        for link in extract_https_links(pdf_content_first):
             if 'doi.org' in link:
                 continue
             
-            context = extract_link_context(pdf_content, link) # 链接前后的文本内容
+            context = extract_link_context(pdf_content_first, link) # 链接前后的文本内容
             classification_result = classify_text(context)
             print(classification_result)
             logging.info(f"Classification result: {classification_result}")
