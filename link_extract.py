@@ -68,18 +68,6 @@ def read_pdf_first_page(file_path: str) -> str:
         logging.error(f"Failed to read first page of PDF: {file_path} - {e}")
         raise
 
-
-def fetch_webpage_content(url: str) -> str:
-    """获取网页内容"""
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        print(response.text)
-        return response.text
-    except requests.RequestException as e:
-        logging.error(f"Failed to fetch webpage content from URL: {url} - {e}")
-        raise
-
 def extract_https_links(text: str) -> list:
     """从文本中提取所有HTTPS链接"""
     return re.findall(r'https://\S+', text)
@@ -116,7 +104,9 @@ def classify_text(text: str) -> str:
 def process_pdf_from_url(pdf_data):
     """处理在线PDF文件"""
     url = str(pdf_data['pdf_link'])
-    print(url)
+    pdf_id = str(pdf_data['pdf_id'])
+    # print(pdf_id)
+    # print(url)
     try:
         pdf_content_first = read_pdf_first_page_from_url(url)
         pdf_content = read_pdf_from_url(url)
@@ -136,7 +126,7 @@ def process_pdf_from_url(pdf_data):
             if classification_result == "Dataset: Yes":
                 encoded_url = process_content(pdf_data, link) # dataset url
                 json_result = analyse_content(pdf_data, context, url) 
-                add_dataset_info(pdf_data['category'], encoded_url, json_result) #
+                add_dataset_info(pdf_data['category'], pdf_id, json_result) #
     except Exception as e:
         logging.error(f"An error occurred with URL {url}: {str(e)}")
 

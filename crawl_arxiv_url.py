@@ -88,7 +88,7 @@ def get_pdf_urls():
                     pdf_data.append({
                         'category': category_name,
                         'date': date_str.replace(" ", "_"),
-                        'pdf_id': pdf_link.split('/')[-1],
+                        'pdf_id': pdf_link.split('/')[-1].replace('.', ''),
                         'pdf_link': pdf_link
                     })
                     

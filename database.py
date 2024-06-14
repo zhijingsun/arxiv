@@ -25,3 +25,4 @@ def add_dataset_info(category, url, info_json):
     info_data = json.loads(info_json)
     response = requests.patch(DATABASE_URL,json={str(url):info_data})
     print(response.status_code)
+
