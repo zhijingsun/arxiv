@@ -10,7 +10,7 @@ from phi.tools.duckduckgo import DuckDuckGo
 from phi.llm.ollama import Ollama
 from textwrap import dedent
 from phi.llm.groq import Groq
-from link_analysis import process_github_readme
+from local.link_analysis import process_github_readme
 
 model: str = "llama3-70b-8192"
 

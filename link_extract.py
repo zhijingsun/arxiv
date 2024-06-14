@@ -7,7 +7,7 @@ from PyPDF2 import PdfReader
 import torch
 from transformers import BertTokenizer, BertForSequenceClassification
 
-from link_analysis import process_content
+from link_valid import process_content
 from crawl_arxiv_url import get_pdf_urls
 
 # 设置日志配置
@@ -104,13 +104,15 @@ def process_pdf_from_url(pdf_data):
     url = str(pdf_data['pdf_link'])
     try:
         pdf_content_first = read_pdf_first_page_from_url(url)
+        pdf_content = read_pdf_from_url(url)
+        
         
         # 提取链接上下文并用于分类文本
-        for link in extract_https_links(pdf_content_first):
+        for link in extract_https_links(pdf_content):
             if 'doi.org' in link:
                 continue
             
-            context = extract_link_context(pdf_content_first, link)
+            context = extract_link_context(pdf_content, link)
             classification_result = classify_text(context)
             print(classification_result)
             logging.info(f"Classification result: {classification_result}")
