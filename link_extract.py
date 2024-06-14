@@ -18,6 +18,31 @@ MODEL_PATH = os.path.expanduser('~/Desktop/东理/BERT/fine_tuned_model')
 tokenizer = BertTokenizer.from_pretrained(MODEL_PATH)
 model = BertForSequenceClassification.from_pretrained(MODEL_PATH)
 
+def read_pdf_from_url(url: str) -> str:
+    """读取在线PDF文件并返回其内容"""
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        with open('/tmp/temp.pdf', 'wb') as f:
+            f.write(response.content)
+        return read_pdf('/tmp/temp.pdf')
+    except requests.RequestException as e:
+        logging.error(f"Failed to fetch PDF from URL: {url} - {e}")
+        raise
+    
+def read_pdf(file_path: str) -> str:
+    """读取PDF文件并返回其内容"""
+    try:
+        with open(file_path, 'rb') as file:
+            reader = PdfReader(file)
+            content = ""
+            for page in reader.pages:
+                content += page.extract_text()
+            return content
+    except Exception as e:
+        logging.error(f"Failed to read PDF: {file_path} - {e}")
+        raise
+
 def read_pdf_first_page_from_url(url: str) -> str:
     """读取在线PDF文件的第一页并返回其内容"""
     try:
