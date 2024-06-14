@@ -37,7 +37,8 @@ def analyse_content(pdf_data, text: str):
                 "Your description should follow the format provided below.",
                 dedent("""
                     <report_format>
-                    {
+                    {   
+                        "Title": "Dataset Title",
                         "Description": "Derive a succinct description about the dataset",
                     }
                     </report_format>
@@ -58,7 +59,7 @@ def analyse_content(pdf_data, text: str):
         response_dict["OriginalText"] = text
 
         # Convert to JSON format
-        json_result = json.dumps(response_dict, indent=1)
+        json_result = json.dumps(response_dict, indent=4)
         print("Final JSON result:", json_result)
 
         return json_result

@@ -50,7 +50,15 @@ search_query = st.text_input("Search Datasets")
 # 可搜索title和domain
 filtered_flattened_data = []
 for category, category_data_list in flattened_data:
-    filtered_category_data_list = [dataset for dataset in category_data_list if search_query.lower() in dataset['Title'].lower() or search_query.lower() in dataset['Description'].lower() or search_query.lower() in dataset['Domain'].lower()]
+    filtered_category_data_list = [
+    dataset for dataset in category_data_list 
+        if ('Title' in dataset and 'Description' in dataset and 'OriginalText' in dataset) and
+            (search_query.lower() in dataset['Title'].lower() or
+            search_query.lower() in dataset['Description'].lower() or 
+            search_query.lower() in dataset['OriginalText'].lower() 
+            )
+    ]
+
     if filtered_category_data_list:
         filtered_flattened_data.append((category, filtered_category_data_list))
 
@@ -60,9 +68,10 @@ for category, category_data_list in filtered_flattened_data:
         for dataset in category_data_list:
             st.markdown(f"### {dataset['Title']}")
             st.markdown(f"**Description:** {dataset['Description']}")
-            st.markdown(f"**Domain:** {dataset['Domain']}")
-            st.markdown(f"**Language:** {dataset['Language']}")
-            st.markdown(f"**Size:** {dataset['Size']}")
-            st.markdown(f"**Example Problem:** {dataset['Example']['Problem']}")
-            st.markdown(f"**Example Solution:** {dataset['Example']['Solution']}")
-            st.markdown(f"**URL:** [{dataset['URL']}]({dataset['URL']})")
+            # st.markdown(f"**Domain:** {dataset['Domain']}")
+            # st.markdown(f"**Language:** {dataset['Language']}")
+            # st.markdown(f"**Size:** {dataset['Size']}")
+            # st.markdown(f"**Example Problem:** {dataset['Example']['Problem']}")
+            # st.markdown(f"**Example Solution:** {dataset['Example']['Solution']}")
+            # st.markdown(f"**URL:** [{dataset['URL']}]({dataset['URL']})")
+            st.markdown(f"**context:** {dataset['OriginalText']}")

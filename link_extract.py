@@ -13,7 +13,7 @@ from link_valid import process_content
 from crawl_arxiv_url import get_pdf_urls
 
 # 设置日志配置
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 # 设置模型路径和分词器
 MODEL_PATH = os.path.expanduser('~/Desktop/东理/BERT/fine_tuned_model')
@@ -116,6 +116,7 @@ def classify_text(text: str) -> str:
 def process_pdf_from_url(pdf_data):
     """处理在线PDF文件"""
     url = str(pdf_data['pdf_link'])
+    print(url)
     try:
         pdf_content_first = read_pdf_first_page_from_url(url)
         pdf_content = read_pdf_from_url(url)
@@ -126,7 +127,7 @@ def process_pdf_from_url(pdf_data):
             if 'doi.org' in link:
                 continue
             
-            context = extract_link_context(pdf_content, link)
+            context = extract_link_context(pdf_content, link) # 链接前后的文本内容
             classification_result = classify_text(context)
             print(classification_result)
             logging.info(f"Classification result: {classification_result}")
