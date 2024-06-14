@@ -6,6 +6,8 @@ from datetime import datetime
 from PyPDF2 import PdfReader
 import torch
 from transformers import BertTokenizer, BertForSequenceClassification
+from database import add_dataset_info #
+from abstract_analysis import analyse_content #
 
 from link_valid import process_content
 from crawl_arxiv_url import get_pdf_urls
@@ -66,6 +68,18 @@ def read_pdf_first_page(file_path: str) -> str:
         logging.error(f"Failed to read first page of PDF: {file_path} - {e}")
         raise
 
+
+def fetch_webpage_content(url: str) -> str:
+    """获取网页内容"""
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        print(response.text)
+        return response.text
+    except requests.RequestException as e:
+        logging.error(f"Failed to fetch webpage content from URL: {url} - {e}")
+        raise
+
 def extract_https_links(text: str) -> list:
     """从文本中提取所有HTTPS链接"""
     return re.findall(r'https://\S+', text)
@@ -119,7 +133,9 @@ def process_pdf_from_url(pdf_data):
 
             # 处理分类结果
             if classification_result == "Dataset: Yes":
-                process_content(pdf_data, link)
+                encoded_url = process_content(pdf_data, link) #
+                json_result = analyse_content(pdf_data, context) # change context to content
+                add_dataset_info(pdf_data['category'], encoded_url, json_result) #
     except Exception as e:
         logging.error(f"An error occurred with URL {url}: {str(e)}")
 
