@@ -87,7 +87,7 @@ def extract_link_context(text: str, link: str, window_size: int = 100) -> str:
     # 标记链接的位置
     link_start = index - start_index
     link_end = link_start + len(link)
-    context = context[:link_start] + "[LINK]" + context[link_start:link_end] + "[/LINK]" + context[link_end:]
+    context = context[:link_start] + " " + context[link_start:link_end] + " " + context[link_end:]
 
     print(context)
 
