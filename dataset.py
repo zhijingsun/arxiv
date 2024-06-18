@@ -4,6 +4,7 @@ import time
 import json
 from extract_abstract import is_valid_pdf, extract_abstract_from_pdf
 from crawl_arxiv_url import get_pdf_urls
+from read_excel import excel_sheet_to_json
 
 def read_pdf_abstract_from_url(url: str) -> dict:
     """Reads an online PDF file and extracts the abstract."""
@@ -18,30 +19,39 @@ def read_pdf_abstract_from_url(url: str) -> dict:
 
         # Check if the PDF is valid
         if not is_valid_pdf('/tmp/temp.pdf'):
-            return {"url": url, "abstract": "Invalid PDF file."}
+            return "Invalid PDF file."
 
         # Extract the abstract from the saved PDF
         abstract = extract_abstract_from_pdf('/tmp/temp.pdf')
-        print(abstract)
-        return {"url": url, "abstract": abstract}
+        return abstract
 
     except requests.RequestException as e:
         logging.error(f"Failed to fetch PDF from URL: {url} - {e}")
     except Exception as e:
         logging.error(f"Error occurred: {e}")
 
+def output_from_excel(file_path: str):
+    excel_info = excel_sheet_to_json(file_path, sheet_index=1)
+    output = []
+    for row in excel_info:
+        if type(row['paper link'])!= str:
+            continue
+        label = row['label']
+        abstract = read_pdf_abstract_from_url(row['paper link'])
+        if abstract == None:
+            continue
+        one_set = {"label": label, "abstract": abstract}
+        output.append(one_set)
+        time.sleep(2)
+        print(output)
+    return output 
+
 if __name__ == "__main__":
-    pdf_urls = get_pdf_urls()
-    abstracts = []
-
-    for pdf_data in pdf_urls:
-        abstract_info = read_pdf_abstract_from_url(str(pdf_data['pdf_link']))
-        abstracts.append(abstract_info)
-        time.sleep(2)  # Delay before the next iteration
-
-    # Write all abstracts to a JSON file
+    file_path = '~/datasetcollection.xlsx'
+    result = output_from_excel(file_path)
+    # Write the results to a JSON file
     output_file = 'all_abstracts.json'
     with open(output_file, 'w') as outfile:
-        json.dump(abstracts, outfile, indent=4)
+        json.dump(result, outfile, indent=4)
 
     print(f"All abstracts extracted and saved to {output_file}")
