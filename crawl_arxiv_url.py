@@ -34,11 +34,11 @@ def get_pdf_urls():
     base_url = 'https://arxiv.org'
     list_url = [
         f'{base_url}/list/cs.IR/recent?skip=0&show=5',
-        f'{base_url}/list/cs.DB/recent?skip=0&show=5',
-        f'{base_url}/list/cs.AI/recent?skip=0&show=5',
-        f'{base_url}/list/cs.CL/recent?skip=0&show=5',
-        f'{base_url}/list/cs.CV/recent?skip=0&show=5',
-        f'{base_url}/list/cs.MA/recent?skip=0&show=5'
+        # f'{base_url}/list/cs.DB/recent?skip=0&show=5',
+        # f'{base_url}/list/cs.AI/recent?skip=0&show=5',
+        # f'{base_url}/list/cs.CL/recent?skip=0&show=5',
+        # f'{base_url}/list/cs.CV/recent?skip=0&show=5',
+        # f'{base_url}/list/cs.MA/recent?skip=0&show=5'
     ]
 
     retry_strategy = Retry(
