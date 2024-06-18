@@ -1,8 +1,8 @@
 import requests
 import logging
-import pdfplumber
 from PyPDF2 import PdfReader
 from PyPDF2.errors import PdfReadError
+import json
 
 #logging.basicConfig(level=logging.INFO)
 
@@ -23,7 +23,8 @@ def read_pdf_abstract_from_url(url: str) -> str:
             return "Invalid PDF file."
 
         # Extract the abstract from the saved PDF
-        return extract_abstract_from_pdf('/tmp/temp.pdf')
+        abstract = extract_abstract_from_pdf('/tmp/temp.pdf')
+        return json.dumps({"url": url, "abstract": abstract})
     except requests.RequestException as e:
         logging.error(f"Failed to fetch PDF from URL: {url} - {e}")
         raise
