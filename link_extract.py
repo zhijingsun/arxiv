@@ -69,7 +69,7 @@ def read_pdf_first_page(file_path: str) -> str:
         raise
 
 def extract_https_links(text: str) -> list:
-    """从文本中提取所有HTTPS链接，并去除'arXiv:'部分"""
+    """从文本中提取所有HTTPS链接,并去除'arXiv:'部分"""
     # 提取所有的 HTTPS 链接
     all_links = re.findall(r'https://\S+', text)
     # 去除每个链接中包含的 'arXiv:' 部分

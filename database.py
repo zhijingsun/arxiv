@@ -4,16 +4,6 @@ import requests
 import sys
 
 
-# Firebase Database URLs (Replace these URLs with your actual Firebase URLs)
-# DATABASE_URLS = {
-#     0: "https://arxiv-analysis-default-rtdb.asia-southeast1.firebasedatabase.app/IR.json",
-#     1: "https://arxiv-analysis-default-rtdb.asia-southeast1.firebasedatabase.app/DB.json",
-#     2: "https://arxiv-analysis-default-rtdb.asia-southeast1.firebasedatabase.app/AI.json",
-#     3: "https://arxiv-analysis-default-rtdb.asia-southeast1.firebasedatabase.app/CL.json",
-#     4: "https://arxiv-analysis-default-rtdb.asia-southeast1.firebasedatabase.app/CV.json",
-#     5: "https://arxiv-analysis-default-rtdb.asia-southeast1.firebasedatabase.app/MA.json",
-# }
-
 base_url = "https://arxiv-analysis-default-rtdb.asia-southeast1.firebasedatabase.app/"
 
 
