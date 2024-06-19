@@ -21,16 +21,26 @@ def encode_url(url: str) -> str:
     # Replace special characters with acceptable characters
     return url.replace('.', '_').replace('$', '_').replace('#', '_').replace('[', '_').replace(']', '_').replace('/', '_')
 
-def is_invalid_link(content: str) -> bool:
-    """Check if the link content is invalid or the page shows 'code is coming soon'.
+def is_invalid_link(url: str) -> bool:
+    """Check if the link is invalid, shows 'code is coming soon', or returns a 404 error.
 
     Args:
-        content (str): The content of the page.
+        url (str): The URL to check.
 
     Returns:
-        bool: True if the link is invalid or shows 'code is coming soon', False otherwise.
+        bool: True if the link is invalid, shows 'code is coming soon', or returns a 404 error, False otherwise.
     """
-    if not content or 'code is coming soon' in content.lower():
+    try:
+        response = requests.get(url)
+        # Check if the URL returns a 404 error
+        if response.status_code == 404:
+            return True
+        content = response.text
+        # Check if the content is empty or shows 'code is coming soon'
+        if not content or 'code is coming soon' in content.lower():
+            return True
+    except requests.RequestException:
+        # If there's an issue with the request itself, we can assume the link is invalid
         return True
     return False
 
