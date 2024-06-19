@@ -43,7 +43,6 @@ def output_from_excel(file_path: str):
         one_set = {"label": label, "abstract": abstract}
         output.append(one_set)
         time.sleep(2)
-        print(output)
     return output 
 
 if __name__ == "__main__":
