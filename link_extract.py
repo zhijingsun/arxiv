@@ -93,8 +93,6 @@ def extract_link_context(text: str, link: str, window_size: int = 100) -> str:
     link_end = link_start + len(link)
     context = context[:link_start] + " " + context[link_start:link_end] + " " + context[link_end:]
 
-    print(context)
-
     return context
 
 
