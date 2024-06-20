@@ -5,7 +5,8 @@ import json
 from extract_abstract import is_valid_pdf, extract_abstract_from_pdf
 from crawl_arxiv_url import get_pdf_urls
 from read_excel import excel_sheet_to_json
-from abstract_context_extract import extract_abstract_context_from_pdf
+from local.abstract_context_extract import extract_abstract_context_from_pdf
+from abstract_title import extract_abstract_title_from_pdf
 
 def read_pdf_abstract_from_url(url: str) -> dict:
     """Reads an online PDF file and extracts the abstract and context."""
@@ -24,8 +25,8 @@ def read_pdf_abstract_from_url(url: str) -> dict:
             return None, None
 
         # Extract the abstract and context from the saved PDF
-        abstract, context = extract_abstract_context_from_pdf('/tmp/temp.pdf')
-        return abstract, context
+        text_before_introduction = extract_abstract_title_from_pdf('/tmp/temp.pdf')
+        return text_before_introduction
 
     except requests.RequestException as e:
         logging.error(f"Failed to fetch PDF from URL: {url} - {e}")
@@ -42,10 +43,10 @@ def output_from_excel(file_path: str):
             continue
         label = row['label']
         url = row['paper link']
-        abstract, context = read_pdf_abstract_from_url(row['paper link'])
-        if abstract is None or context is None:
+        text_before_introduction = read_pdf_abstract_from_url(row['paper link'])
+        if text_before_introduction is None:
             continue
-        one_set = {"url": url, "label": label, "abstract": abstract, "context": context}
+        one_set = {"url": url, "label": label, "text_before_introduction": text_before_introduction}
         output.append(one_set)
         time.sleep(2)
     return output 
@@ -54,7 +55,7 @@ if __name__ == "__main__":
     file_path = '~/datasetcollection.xlsx'
     result = output_from_excel(file_path)
     # Write the results to a JSON file
-    output_file = 'all_abstracts.json'
+    output_file = 'dataset.json'
     with open(output_file, 'w') as outfile:
         json.dump(result, outfile, indent=4)
 
