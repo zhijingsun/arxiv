@@ -37,13 +37,14 @@ def is_invalid_link(url: str) -> bool:
             return True
         content = response.text
         # Check if the content is empty or shows 'code is coming soon'
-        if not content or 'code is coming soon' in content.lower():
+        if not content or 'coming soon' in content.lower():
             return True
     except requests.RequestException:
         # If there's an issue with the request itself, we can assume the link is invalid
         return True
     return False
 
+print(is_invalid_link("https://github.com/NYUSHCS/GAugLLM"))
 
 def process_content(pdf_data, url_link: str):
     # print(url_link)
