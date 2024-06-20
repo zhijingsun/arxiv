@@ -31,20 +31,21 @@ def is_invalid_link(url: str) -> bool:
         bool: True if the link is invalid, shows 'code is coming soon', or returns a 404 error, False otherwise.
     """
     try:
-        response = requests.get(url)
+        response = requests.get(url, stream=True)
         # Check if the URL returns a 404 error
         if response.status_code == 404:
             return True
-        content = response.text
+        
+        first_chunk = next(response.iter_content(chunk_size=50), b'').decode('utf-8').lower()
+        
         # Check if the content is empty or shows 'code is coming soon'
-        if not content or 'coming soon' in content.lower():
+        if 'coming soon' in first_chunk or 'released soon' in first_chunk:
             return True
     except requests.RequestException:
         # If there's an issue with the request itself, we can assume the link is invalid
         return True
     return False
 
-print(is_invalid_link("https://github.com/NYUSHCS/GAugLLM"))
 
 def process_content(pdf_data, url_link: str):
     # print(url_link)
