@@ -4,6 +4,7 @@ import re
 import requests
 from datetime import datetime
 from PyPDF2 import PdfReader
+from PyPDF2.errors import PdfReadError
 import torch
 from transformers import BertTokenizer, BertForSequenceClassification
 from database import add_dataset_info #
@@ -103,6 +104,83 @@ def classify_text(text: str) -> str:
     predictions = torch.argmax(outputs.logits, dim=-1)
     return "Dataset: Yes" if predictions.item() == 1 else "Dataset: No"
 
+
+
+
+### 抓取论文title及abstract ###
+def is_valid_pdf(file_path: str) -> bool:
+    """Checks if a file is a valid PDF."""
+    try:
+        PdfReader(file_path)
+        return True
+    except PdfReadError:
+        return False
+
+def extract_abstract_title_from_pdf(file_path: str) -> str:
+    """Extracts the abstract from the PDF file."""
+    try:
+        with open(file_path, 'rb') as file:
+            reader = PdfReader(file)
+            text = ""
+            
+            # Extract text from the first two pages
+            for i in range(2):
+                if i < len(reader.pages):
+                    page = reader.pages[i]
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text.lower()
+                        
+            if not text:
+                return "No text found on the first two pages.", ""
+
+            # Locate and extract the abstract
+            introduction_start = text.find("introduction")
+
+            if introduction_start != -1:
+                text_before_introduction = text[:introduction_start].strip()
+                return text_before_introduction
+            else:
+                return "Abstract or Introduction section not found on the first page."
+    except Exception as e:
+        logging.error(f"Failed to read or extract abstract from PDF: {file_path} - {e}")
+        raise
+
+def read_pdf_abstract_from_url(url: str) -> dict:
+    """Reads an online PDF file and extracts the abstract and title."""
+    try:
+        # Fetch the PDF from the URL
+        response = requests.get(url)
+        response.raise_for_status()
+
+        # Save the PDF to a temporary file
+        with open('/tmp/temp.pdf', 'wb') as f:
+            f.write(response.content)
+
+        # Check if the PDF is valid
+        if not is_valid_pdf('/tmp/temp.pdf'):
+            logging.warning(f"Invalid PDF file for URL: {url}")
+            return None, None
+
+        # Extract the abstract and context from the saved PDF
+        text_before_introduction = extract_abstract_title_from_pdf('/tmp/temp.pdf')
+        return text_before_introduction
+        # abstract = extract_abstract_from_pdf('/tmp/temp.pdf')
+        # return abstract
+        
+
+    except requests.RequestException as e:
+        logging.error(f"Failed to fetch PDF from URL: {url} - {e}")
+        return None, None
+    except Exception as e:
+        logging.error(f"Error occurred: {e}")
+        return None, None
+
+
+
+
+
+### 数据库存储 ###
 def process_pdf_from_url(pdf_data):
     """处理在线PDF文件"""
     url = str(pdf_data['pdf_link'])
@@ -120,8 +198,8 @@ def process_pdf_from_url(pdf_data):
                 continue
             
             context = extract_link_context(pdf_content_first, link) # 链接前后的文本内容
-            classification_result = classify_text(context)
-            print(classification_result)
+            text_before_introduction = read_pdf_abstract_from_url(url) # 论文的title和abstract
+            classification_result = classify_text(text_before_introduction)
             logging.info(f"Classification result: {classification_result}")
 
             # 处理分类结果
@@ -131,8 +209,6 @@ def process_pdf_from_url(pdf_data):
                 add_dataset_info(pdf_data['category'], pdf_id, json_result) #
     except Exception as e:
         logging.error(f"An error occurred with URL {url}: {str(e)}")
-
-
 
 
 # 示例调用
