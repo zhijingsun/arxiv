@@ -36,10 +36,24 @@ def is_invalid_link(url: str) -> bool:
         if response.status_code == 404:
             return True
         
-        first_chunk = next(response.iter_content(chunk_size=50), b'').decode('utf-8').lower()
-        
+        if "github.com" in url:
+            response = requests.get(url)
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Find the README section
+            readme_section = soup.find('article', class_='markdown-body entry-content container-lg')
+            
+            if readme_section:
+                readme_text = readme_section.get_text()
+                first_chunk = readme_text[:100].strip().lower()
+            else:
+                first_chunk = ''
+        else:
+            first_chunk = next(response.iter_content(chunk_size=100), b'').decode('utf-8').lower()
+
         # Check if the content is empty or shows 'code is coming soon'
-        if 'coming soon' in first_chunk or 'released soon' in first_chunk:
+
+        if not first_chunk or 'coming soon' in first_chunk or 'released soon' in first_chunk:
             return True
     except requests.RequestException:
         # If there's an issue with the request itself, we can assume the link is invalid
