@@ -1,6 +1,6 @@
 import logging
 import requests
-
+from bs4 import BeautifulSoup
 
 # # 配置日志记录
 # logging.basicConfig(level=logging.DEBUG)
