@@ -70,11 +70,31 @@ def read_pdf_first_page(file_path: str) -> str:
         raise
 
 def extract_https_links(text: str) -> list:
-    """从文本中提取所有HTTPS链接,并去除'arXiv:'部分"""
-    # 提取所有的 HTTPS 链接
+    """Extract all HTTPS links from the text and clean 'arXiv:' part if present."""
     all_links = re.findall(r'https://\S+', text)
-    # 去除每个链接中包含的 'arXiv:' 部分
-    cleaned_links = [re.sub(r'arXiv:\S+', '', link).strip() for link in all_links]
+    cleaned_links = []
+    for link in all_links:
+        # Remove 'arXiv:' part
+        cleaned_link = re.sub(r'arXiv:\S+', '', link).strip()
+        # Find the position of the link in the original text
+        start_index = text.find(link) + len(link)
+        # Check the character immediately after the link
+        if start_index < len(text) and text[start_index+1] not in ['.', ',', '1']:
+            # Extract the next word and append it to the link
+            remaining_text = text[start_index:].strip()
+            next_word = re.match(r'\S+', remaining_text)
+            if next_word: #if match the format of string + white space
+                extended_link = cleaned_link + next_word.group(0)
+                # Validate the extended link
+                response = requests.get(extended_link, stream=True)
+                if response.status_code != 404:
+                    cleaned_links.append(extended_link)
+                    continue
+        # If the link is followed by punctuation or the extended link is invalid, use the original link
+        if cleaned_link.endswith('.') or cleaned_link.endswith(','):
+            cleaned_link = cleaned_link[:-1]
+        cleaned_links.append(cleaned_link)
+    
     return cleaned_links
 
 def extract_link_context(text: str, link: str, window_size: int = 100) -> str:
