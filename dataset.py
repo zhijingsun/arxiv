@@ -4,8 +4,9 @@ import time
 import json
 from extract_abstract import is_valid_pdf, extract_abstract_from_pdf
 from read_excel import excel_sheet_to_json
-from local.abstract_context_extract import extract_abstract_context_from_pdf
-from abstract_title import extract_abstract_title_from_pdf
+#from local.abstract_context_extract import extract_abstract_context_from_pdf
+#from abstract_title import extract_abstract_title_from_pdf
+from extract_title import extract_title_from_pdf
 
 def read_pdf_abstract_from_url(url: str) -> dict:
     """Reads an online PDF file and extracts the abstract and title."""
@@ -24,8 +25,12 @@ def read_pdf_abstract_from_url(url: str) -> dict:
             return None, None
 
         # Extract the abstract and context from the saved PDF
-        text_before_introduction = extract_abstract_title_from_pdf('/tmp/temp.pdf')
-        return text_before_introduction
+        #text_before_introduction = extract_abstract_title_from_pdf('/tmp/temp.pdf')
+        #return text_before_introduction
+
+        title = extract_title_from_pdf('/tmp/temp.pdf')
+        print(title)
+        return title
         # abstract = extract_abstract_from_pdf('/tmp/temp.pdf')
         # return abstract
         
