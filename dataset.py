@@ -29,7 +29,6 @@ def read_pdf_abstract_from_url(url: str) -> dict:
         #return text_before_introduction
 
         title = extract_title_from_pdf('/tmp/temp.pdf')
-        print(title)
         return title
         # abstract = extract_abstract_from_pdf('/tmp/temp.pdf')
         # return abstract
