@@ -43,16 +43,17 @@ def extract_abstract_from_pdf(file_path: str) -> str:
         with open(file_path, 'rb') as file:
             reader = PdfReader(file)
             text = reader.pages[0].extract_text()
+            text += reader.pages[1].extract_text()
 
             # Convert text to lowercase for case-insensitive search
             text = text.lower()
-
             # Locate and extract the abstract
             abstract_start = text.find("abstract")
             introduction_start = text.find("introduction")
             
             if abstract_start != -1 and introduction_start != -1:
                 abstract = text[abstract_start + len("abstract"):introduction_start].strip()
+                abstract = abstract.replace('\n', ' ')
                 return abstract
             else:
                 return "Abstract or Introduction section not found on the first page."
