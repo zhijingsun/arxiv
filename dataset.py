@@ -40,6 +40,7 @@ def read_pdf_abstract_from_url(url: str) -> dict:
 def output_from_excel(file_path: str):
     excel_info = excel_sheet_to_json(file_path, sheet_index=1)
     output = []
+    i = 1
     for row in excel_info:
         if not isinstance(row['paper link'], str):
             continue
@@ -51,6 +52,8 @@ def output_from_excel(file_path: str):
         one_set = {"url": url, "label": label, "text_before_introduction": text_before_introduction}
         output.append(one_set)
         time.sleep(2)
+        print(i)
+        i += 1
     return output 
 
 if __name__ == "__main__":

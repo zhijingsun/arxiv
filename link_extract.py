@@ -16,11 +16,6 @@ from crawl_arxiv_url import get_pdf_urls
 # 设置日志配置
 # logging.basicConfig(level=logging.INFO)
 
-# 设置模型路径和分词器
-MODEL_PATH = os.path.expanduser('~/Desktop/东理/BERT/fine_tuned_model')
-tokenizer = BertTokenizer.from_pretrained(MODEL_PATH)
-model = BertForSequenceClassification.from_pretrained(MODEL_PATH)
-
 def read_pdf_from_url(url: str) -> str:
     """读取在线PDF文件并返回其内容"""
     try:
@@ -96,6 +91,11 @@ def extract_link_context(text: str, link: str, window_size: int = 100) -> str:
 
     return context
 
+
+# 设置模型路径和分词器
+MODEL_PATH = os.path.expanduser('~/Desktop/东理/arxiv_bert/fine_tuned_model')
+tokenizer = BertTokenizer.from_pretrained(MODEL_PATH)
+model = BertForSequenceClassification.from_pretrained(MODEL_PATH)
 
 def classify_text(text: str) -> str:
     """使用BERT模型分类文本, 判断是否包含数据库"""
