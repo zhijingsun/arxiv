@@ -87,18 +87,18 @@ def read_pdf_title_from_url(url: str) -> dict:
     
 
 def output_from_excel(file_path: str):
-    excel_info = excel_sheet_to_json(file_path, sheet_index=1)
+    excel_info = excel_sheet_to_json(file_path, sheet_index=0)
     output = []
     count = 0
     for row in excel_info:
         if count == 118:
             break
-        if not isinstance(row['paper link'], str):
+        if not isinstance(row['url'], str):
             continue
         label = row['label']
-        url = row['paper link']
-        abstract = read_pdf_abstract_from_url(row['paper link'])
-        title = read_pdf_title_from_url(row['paper link'])
+        url = row['url']
+        abstract = read_pdf_abstract_from_url(row['url'])
+        title = read_pdf_title_from_url(row['url'])
         if abstract is None or title is None:
             continue
         one_set = {"url": url, "label": label, "title": title, "abstract": abstract}
@@ -109,7 +109,7 @@ def output_from_excel(file_path: str):
     return output 
 
 if __name__ == "__main__":
-    file_path = '~/desktop/datasetcollection.xlsx'
+    file_path = '~/desktop/datacollection.xlsx'
     result = output_from_excel(file_path)
     # Write the results to a JSON file
     output_file = 'dataset.json'

@@ -13,10 +13,6 @@ from pydantic import BaseModel
 # Configuration for logging
 # logging.basicConfig(level=logging.DEBUG)
 
-TAVILY_API_KEY = "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"
-GROQ_API_KEY = "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"
-
-os.environ["GROQ_API_KEY"] = GROQ_API_KEY
 
 model = "llama3-70b-8192"
 

@@ -3,7 +3,7 @@ import pandas as pd
 import json
 import logging
 
-def excel_sheet_to_json(file_path: str, sheet_index: int = 1, link_column: str = 'paper link', label_column: str = 'label') -> str:
+def excel_sheet_to_json(file_path: str, sheet_index: int = 1, link_column: str = 'url', label_column: str = 'label') -> str:
     """
     Reads a specific sheet from an Excel file and extracts specified columns,
     then converts the data to JSON format.
