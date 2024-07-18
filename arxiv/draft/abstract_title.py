@@ -3,7 +3,7 @@ import logging
 from PyPDF2 import PdfReader
 from PyPDF2.errors import PdfReadError
 import json
-from link_extract import extract_link_context, extract_https_links
+from arxiv.draft.link_extract import extract_link_context, extract_https_links
 
 def is_valid_pdf(file_path: str) -> bool:
     """Checks if a file is a valid PDF."""

@@ -83,8 +83,14 @@ def json_to_excel(json_file, excel_file):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
-    # Load JSON file containing papers
-    with open('latest_papers.json', 'r') as f:
+    # 获取脚本文件的当前路径
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # 构造相对路径
+    json_file_path = os.path.join(script_dir, '../../latest_papers.json')
+
+    # 读取 JSON 文件
+    with open(json_file_path, 'r') as f:
         papers = json.load(f)
     
     # Path to the fine-tuned model

@@ -7,7 +7,7 @@ from phi.assistant import Assistant
 from phi.tools.duckduckgo import DuckDuckGo
 from phi.llm.groq import Groq
 from textwrap import dedent
-from database import add_dataset_info
+from arxiv.draft.database import add_dataset_info
 from pydantic import BaseModel
 
 # # 配置日志记录

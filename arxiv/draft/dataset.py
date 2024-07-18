@@ -6,7 +6,7 @@ from extract_abstract import is_valid_pdf, extract_abstract_from_pdf
 from read_excel import excel_sheet_to_json
 #from local.abstract_context_extract import extract_abstract_context_from_pdf
 #from abstract_title import extract_abstract_title_from_pdf
-from extract_title import extract_title_from_pdf
+from arxiv.draft.extract_title import extract_title_from_pdf
 from transformers import BertTokenizer
 
 def read_pdf_abstract_from_url(url: str) -> dict:

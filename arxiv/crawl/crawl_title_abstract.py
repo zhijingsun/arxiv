@@ -52,9 +52,10 @@ def fetch_papers_from_url(url):
                 abstract = paper_soup.find('blockquote', class_='abstract mathjax').text.strip().replace('Abstract:', '').strip()
 
                 pdf_url = base_url + dt.find('a', title='Download PDF')['href']
+                html_url = dt.find('a', title='View HTML')['href']
 
                 papers.append({
-                    'url': pdf_url,
+                    'url': html_url,
                     'title': title,
                     'abstract': abstract
                 })

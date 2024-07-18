@@ -8,7 +8,6 @@ import json
 from torch.utils.data import Dataset
 
 
-
 def test_model(test_dataset, tokenizer, model_save_path, epoch):
     # Load the trained model
     model = BertForSequenceClassification.from_pretrained(model_save_path)
@@ -102,7 +101,7 @@ class PDFDataset(Dataset):
     
 
 
-
+### 替换测试集
 with open('./new_training_data.json', 'r') as f: 
     data = json.load(f)
 
