@@ -3,10 +3,13 @@ import logging
 import torch
 import random
 from torch.utils.data import Dataset, DataLoader
-from transformers import set_seed, BertTokenizer, BertForSequenceClassification, Trainer, TrainingArguments, EvalPrediction, EarlyStoppingCallback, TrainerCallback, get_scheduler
+from transformers import set_seed, BertTokenizer, BertForSequenceClassification, Trainer, TrainingArguments, EvalPrediction, EarlyStoppingCallback
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 import json
+
+# 禁用 wandb
+os.environ["WANDB_DISABLED"] = "true"
 
 # Set seed for reproducibility
 def set_all_seeds(seed=42):
@@ -20,7 +23,7 @@ def set_all_seeds(seed=42):
 set_all_seeds(42)
 
 # 从JSON文件中读取数据
-with open('./training_data/augmentation_data/240715.json', 'r') as f: 
+with open('/Users/zhijingsun/Desktop/东理/arxiv/arxiv/arxiv_bert/training_data/augmentation_data/240719.json', 'r') as f: 
     data = json.load(f)
 
 for item in data:
@@ -142,13 +145,14 @@ def train_model():
     # Start training
     trainer.train()
 
-    # Create directory to save the model
-    model_save_path = os.path.expanduser(MODEL_NAME)
-    os.makedirs(model_save_path, exist_ok=True)
+    # # Create directory to save the model
+    # model_save_path = os.path.expanduser(MODEL_NAME)
+    # os.makedirs(model_save_path, exist_ok=True)
 
     # Save the model and tokenizer
-    model.save_pretrained(model_save_path)
-    tokenizer.save_pretrained(model_save_path)
+
+    model.save_pretrained(MODEL_NAME)
+    tokenizer.save_pretrained(MODEL_NAME)
 
 def test_model(test_dataset, tokenizer, model_save_path):
     # Load the trained model
@@ -184,25 +188,6 @@ def test_model(test_dataset, tokenizer, model_save_path):
     # Compute metrics
     acc = accuracy_score(all_labels, all_preds)
     precision, recall, f1, _ = precision_recall_fscore_support(all_labels, all_preds, average='binary')
-
-    # Save results to file
-    results = {
-        'accuracy': acc,
-        'precision': precision,
-        'recall': recall,
-        'f1': f1
-    }
-    results_path = './results/test_results.json'
-    if os.path.exists(results_path):
-        with open(results_path, 'r') as f:
-            all_results = json.load(f)
-    else:
-        all_results = []
-
-    all_results.append(results)
-
-    with open(results_path, 'w') as f:
-        json.dump(all_results, f, indent=4)
 
     print(f"Test Accuracy: {acc:.4f}")
     print(f"Test Precision: {precision:.4f}")

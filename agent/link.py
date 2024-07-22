@@ -62,8 +62,8 @@ def download_files(file_urls, base_url, download_path='datasets'):
         # 构造完整URL
         if not file_url.startswith('http'):
             file_url = base_url + file_url
-            print(file_url)
-        print(file_url)
+            print(f"file_url: {file_url}")
+        print(f"file_url: {file_url}")
         # # 下载文件
         # filename = wget.download(file_url, out=download_path)
         # print(f"Downloaded {filename}")
@@ -84,6 +84,7 @@ def main():
 
             if datasets:
                 base_url = '/'.join(url.split('/')[:5]) + '/'
+                print(f"base url: {base_url}")
                 download_files(datasets, base_url)
         elif 'huggingface.co' in url:
             # 这里可以添加类似的逻辑来处理 HuggingFace 上的数据集
